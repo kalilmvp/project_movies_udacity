@@ -11,15 +11,9 @@ from movies.movie import Movie
 movies_list = []
 
 def get_popular_movies(qtd):
-    #generated on themoviedb, for test purposes
     #here goes the API key generated on themoviedb developer site (https://developers.themoviedb.org)
-    api_key = '7fe8871b7046e089cea0da71acb76f9f'
+    api_key = 'PUT YOUR API KEY HERE'
 
-    #setting proxy
-    #proxy = request.ProxyHandler({"https" : "proxy.jupiter.co.ao:3128"})
-    #opener = request.build_opener(proxy)
-    #request.install_opener(opener)
-    
     trailer_begin_api = 'https://api.themoviedb.org/3/movie/{}/videos?api_key={}'
     poster_begin_path = 'https://image.tmdb.org/t/p/w500{}'
 
