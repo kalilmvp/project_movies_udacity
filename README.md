@@ -1,4 +1,4 @@
-- Popular Movies using MovieDB API 
+<h1>Popular Movies using MovieDB API </h1>
 
     . A project to be used on the FullStack Developer couse at Udacity
 
@@ -11,3 +11,8 @@ To make it easier to use i did let one key as example directly at my code.
 
 Also the results are paginated and the api always returns 20 items per page, so
 this example is taking at account only the first page of the popular movies request. 
+
+To run it:
+
+   1 - put your API KEY
+   2 - execute with the command: python project_1_movies.py     
