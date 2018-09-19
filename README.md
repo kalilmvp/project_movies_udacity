@@ -16,3 +16,4 @@ To run it:
 
    1 - put your API KEY
    2 - execute with the command: python project_1_movies.py     
+ 
