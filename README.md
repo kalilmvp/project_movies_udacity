@@ -14,8 +14,6 @@ this example is taking at account only the first page of the popular movies requ
 
 To run it:
     
-    <ul>
-        <li>1 - put your API KEY </li>
-        <li>2 - execute with the command: python project_1_movies.py </li>
-    </ul>
+* 1 - put your API KEY </li>
+* 2 - execute with the command: python project_1_movies.py </li>
  
