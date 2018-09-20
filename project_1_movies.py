@@ -1,17 +1,33 @@
+# coding: utf8
+
 import fresh_tomatoes
-import urllib.request as request # to make TMDB API calls
+import urllib.request as request
 import json
+
 from movies.movie import Movie
 
-""" 
+"""
     Application created using Python 3 version
-    This project showcase the use of Python 3 and the MovieDB API to return various data
-    about movies. 
+    This project showcase the use of Python 3 and the MovieDB API to return
+    various data about movies.
 """
 movies_list = []
 
+
 def get_popular_movies(api_key, qtd):
-    trailer_begin_api = 'https://api.themoviedb.org/3/movie/{}/videos?api_key={}'
+    """
+        This is the main method of the application. It showcase the popular
+        movies using the moviedb api.
+
+            #api_key: This is attribute is passed by the client of the
+                application, so he can have access to use the public rest api´s
+            #qtd: The quantity of movies to be displayed on the screen.
+                At this version, the maximum are 20 cause of the pagination of
+                the service
+    """
+    trailer_begin_api = 'https://api.themoviedb.org/3/movie/{}'
+    trailer_begin_api = trailer_begin_api + '/videos?api_key={}'
+
     poster_begin_path = 'https://image.tmdb.org/t/p/w500{}'
 
     qtd = int(qtd)
@@ -22,57 +38,72 @@ def get_popular_movies(api_key, qtd):
     print('{} movies to be shown.'.format(qtd))
     print('Loading movies from the API...')
 
+    # setting proxy
+    proxy = request.ProxyHandler({"https": "proxy.jupiter.co.ao:3128"})
+    opener = request.build_opener(proxy)
+    request.install_opener(opener)
+
     try:
-        with request.urlopen('https://api.themoviedb.org/3/movie/popular?api_key={}&page=1'.format(api_key)) as response:
+        with request.urlopen(
+                'https://api.themoviedb.org/3/movie/popular?api_key={}&page=1'
+                    .format(api_key)) as response:
             json_output = json.loads(response.read().decode('utf-8'))
-            
-            #The API always returns 20 items per page, that´s why i´ll have to do it on memory
+
+            # The API always returns 20 items per page, that´s why i´ll have to
+            # do it on memory
             results = json_output['results'][:qtd]
-            #print(results)
-            
+
             title = ''
             description = ''
             trailer_youtube_id = ''
 
             for result in results:
-                #create trailer url
-                #print('Movie: {} - ID: {}'.format(result['title'], result['id']))
-                #print('Trailer url api: {}'.format(trailer_api.format(result['id'], api_key)) )    
                 trailer_api = trailer_begin_api.format(result['id'], api_key)
-                #print(trailer_api)
-                poster_video_path = poster_begin_path.format(result['poster_path'])
-                
-                #print(poster_video_path)
+
+                poster_video_path = poster_begin_path   \
+                    .format(result['poster_path'])
+
                 title = result['title']
                 description = result['overview']
-                
+
                 try:
                     with request.urlopen(trailer_api) as response_trailer_api:
-                        json_output_trailer = json.loads(response_trailer_api.read().decode('utf-8'))
+                        json_output_trailer = json.loads(
+                                                        response_trailer_api
+                                                        .read()
+                                                        .decode('utf-8'))
 
                         if len(json_output_trailer['results']) > 0:
                             result_trailer = json_output_trailer['results'][0]
-                            #print('Trailer name: {} - Key: {}'.format(result_trailer['name'], result_trailer['key']))
 
                             trailer_youtube_id = result_trailer['key']
-                            #print(trailer_youtube)
+
+                            movies_list.append(
+                                Movie(
+                                    title,
+                                    description,
+                                    poster_video_path,
+                                    trailer_youtube_id))
                 except request.HTTPError as httpError:
-                    print('The server couldn\'t fulfill the request for the movie {}.'.format(title))
+                    message = """ The server couldn\'t fulfill the request for
+                                the movie {}. """.format(title)
+                    print(message)
                     print('Error: ', httpError)
                     print('Error: ', httpError)
 
-
-                movies_list.append(Movie(title, description, poster_video_path, trailer_youtube_id))    
-            
             print('Finished Loading movies from the API')
-
-            fresh_tomatoes.open_movies_page(movies_list)
+            if len(movies_list) > 0:
+                fresh_tomatoes.open_movies_page(movies_list)
+            else:
+                print('Movie list was not loaded')
     except request.HTTPError as httpError:
         print('The server couldn\'t fulfill the request.')
         print('Error: ', httpError)
-        
 
-api_key = input('Put your API KEY: ')             
+
+api_key = input('Put your API KEY: ')
+question = 'How many movies do you want? The quantity of results has to be'
+question = question + 'between 1 and 20: '
 get_popular_movies(
     api_key,
-    input("How many movies do you want? The quantity of results has to be between 1 and 20: "))
+    input(question))
