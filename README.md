@@ -3,7 +3,7 @@
     . A project to be used on the FullStack Developer couse at Udacity
 
 
-This project was developed using the Python Programming Language (v: 3.6.5) and MovieDB API (https://developers.themoviedb.org)
+This project was developed using the Python Programming Language (v: 2.7.10) and MovieDB API (https://developers.themoviedb.org)
 
 To use it´s API is necessário to create a developer account and then you´ll receive a API Key.
 
