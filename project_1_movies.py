@@ -1,6 +1,6 @@
 # coding: utf8
 
-import fresh_tomatoes
+import movie_showcase
 import urllib.request as request
 import json
 
@@ -93,7 +93,7 @@ def get_popular_movies(api_key, qtd):
 
             print('Finished Loading movies from the API')
             if len(movies_list) > 0:
-                fresh_tomatoes.open_movies_page(movies_list)
+                movie_showcase.open_movies_page(movies_list)
             else:
                 print('Movie list was not loaded')
     except request.HTTPError as httpError:
