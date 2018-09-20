@@ -1,19 +1,18 @@
+# coding: utf8
+
 import webbrowser
 
+
 class Movie:
-    """The summary line for a class docstring should fit on one line.
-
-    If the class has public attributes, they may be documented here
-    in an ``Attributes`` section and follow the same formatting as a
-    function's ``Args`` section. Alternatively, attributes may be documented
-    inline with the attribute's declaration (see __init__ method below).
-
-    Properties created with the ``@property`` decorator should be documented
-    in the property's getter method.
+    """ This class represents a movie and it´s properties to be retrieved by the
+        api and presented at the website.
 
     Attributes:
-        attr1 (str): Description of `attr1`.
-        attr2 (:obj:`int`, optional): Description of `attr2`.
+        title (str): The title of the movie.
+        storyline (str): The overview of the movie.
+        poster_image_url (str): The poster web url of the movie.
+        trailer_youtube_id (str): The trailer youtube id to be concatened with
+            the embed url of youtube.
 
     """
 
