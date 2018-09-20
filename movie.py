@@ -1,7 +1,5 @@
 # coding: utf8
 
-import webbrowser
-
 
 class Movie:
     """ This class represents a movie and it´s properties to be retrieved by the

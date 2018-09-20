@@ -1,10 +1,9 @@
 # coding: utf8
 
+from movie import Movie
 import movie_showcase
-import urllib.request as request
 import json
-
-from movies.movie import Movie
+import urllib
 
 """
     Application created using Python 3 version
@@ -39,66 +38,72 @@ def get_popular_movies(api_key, qtd):
     print('Loading movies from the API...')
 
     try:
-        with request.urlopen(
+        connection_movies = urllib.urlopen(
                 'https://api.themoviedb.org/3/movie/popular?api_key={}&page=1'
-                    .format(api_key)) as response:
-            json_output = json.loads(response.read().decode('utf-8'))
+                .format(api_key))
 
-            # The API always returns 20 items per page, that´s why i´ll have to
-            # do it on memory
-            results = json_output['results'][:qtd]
+        json_output = json.loads(connection_movies.read().decode('utf-8'))
 
-            title = ''
-            description = ''
-            trailer_youtube_id = ''
+        # The API always returns 20 items per page, that´s why i´ll have to
+        # do it on memory
+        results = json_output['results'][:qtd]
 
-            for result in results:
-                trailer_api = trailer_begin_api.format(result['id'], api_key)
+        title = ''
+        description = ''
+        trailer_youtube_id = ''
 
-                poster_video_path = poster_begin_path   \
-                    .format(result['poster_path'])
+        connection_movies.close()
 
-                title = result['title']
-                description = result['overview']
+        for result in results:
+            trailer_api = trailer_begin_api.format(result['id'], api_key)
 
-                try:
-                    with request.urlopen(trailer_api) as response_trailer_api:
-                        json_output_trailer = json.loads(
-                                                        response_trailer_api
-                                                        .read()
-                                                        .decode('utf-8'))
+            poster_video_path = poster_begin_path   \
+                .format(result['poster_path'])
 
-                        if len(json_output_trailer['results']) > 0:
-                            result_trailer = json_output_trailer['results'][0]
+            title = result['title']
+            description = result['overview']
 
-                            trailer_youtube_id = result_trailer['key']
+            try:
+                connection_trailer = urllib.urlopen(trailer_api)
 
-                            movies_list.append(
-                                Movie(
-                                    title,
-                                    description,
-                                    poster_video_path,
-                                    trailer_youtube_id))
-                except request.HTTPError as httpError:
-                    message = """ The server couldn\'t fulfill the request for
-                                the movie {}. """.format(title)
-                    print(message)
-                    print('Error: ', httpError)
-                    print('Error: ', httpError)
+                json_output_trailer = json.loads(
+                                                connection_trailer
+                                                .read()
+                                                .decode('utf-8'))
 
-            print('Finished Loading movies from the API')
-            if len(movies_list) > 0:
-                movie_showcase.open_movies_page(movies_list)
-            else:
-                print('Movie list was not loaded')
+                if len(json_output_trailer['results']) > 0:
+                    result_trailer = json_output_trailer['results'][0]
+
+                    trailer_youtube_id = result_trailer['key']
+
+                    movies_list.append(
+                        Movie(
+                            title,
+                            description,
+                            poster_video_path,
+                            trailer_youtube_id))
+
+                connection_trailer.close()
+            except request.HTTPError as httpError:
+                message = """ The server couldn\'t fulfill the request for
+                            the movie {}. """.format(title)
+                print(message)
+                print('Error: ', httpError)
+                print('Error: ', httpError)
+
+        print('Finished Loading movies from the API')
+        if len(movies_list) > 0:
+            movie_showcase.open_movies_page(movies_list)
+        else:
+            print('Movie list was not loaded')
     except request.HTTPError as httpError:
         print('The server couldn\'t fulfill the request.')
         print('Error: ', httpError)
 
 
-api_key = input('Put your API KEY: ')
+api_key = raw_input('Put your API KEY: ')
 question = 'How many movies do you want? The quantity of results has to be'
 question = question + 'between 1 and 20: '
 get_popular_movies(
     api_key,
-    input(question))
+    raw_input(question))
