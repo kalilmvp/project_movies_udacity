@@ -1,4 +1,4 @@
-<h1>Popular Movies using MovieDB API </h1>
+# Popular Movies using MovieDB API
 
     . A project to be used on the FullStack Developer couse at Udacity
 
