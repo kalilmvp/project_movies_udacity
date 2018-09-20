@@ -1,6 +1,6 @@
-<h1>Popular Movies using MovieDB API </h1>
+## Popular Movies using MovieDB API
 
-    . A project to be used on the FullStack Developer couse at Udacity
+### _A project to be used on the FullStack Developer couse at Udacity_
 
 
 This project was developed using the Python Programming Language (v: 2.7.10) and MovieDB API (https://developers.themoviedb.org)
