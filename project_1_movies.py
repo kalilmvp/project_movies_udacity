@@ -38,11 +38,6 @@ def get_popular_movies(api_key, qtd):
     print('{} movies to be shown.'.format(qtd))
     print('Loading movies from the API...')
 
-    # setting proxy
-    proxy = request.ProxyHandler({"https": "proxy.jupiter.co.ao:3128"})
-    opener = request.build_opener(proxy)
-    request.install_opener(opener)
-
     try:
         with request.urlopen(
                 'https://api.themoviedb.org/3/movie/popular?api_key={}&page=1'
